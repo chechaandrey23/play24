@@ -7,7 +7,7 @@ RUN mkdir -p /usr/src/app/client
 
 WORKDIR /usr/src/app
 
-#COPY . .
+COPY . .
 COPY .git .git
 COPY .gitignore .gitignore
 COPY .gitmodules .gitmodules
