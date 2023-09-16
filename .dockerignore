@@ -1,0 +1,13 @@
+Dockerfile
+.dockerignore
+server/node_modules
+server/npm-debug.log
+server/dist
+server/.git
+server/.gitignore
+client/node_modules
+client/npm-debug.log
+client/dist
+client/.git
+client/.gitignore
+.env
