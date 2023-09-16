@@ -12,7 +12,7 @@ COPY .git .git
 COPY .gitignore .gitignore
 COPY .gitmodules .gitmodules
 
-RUN git submodule update --init --recursive
+#RUN git submodule update --init --recursive
 
 FROM node:alpine
 
@@ -21,6 +21,8 @@ FROM node:alpine
 ENV NODE_ENV=development
 
 RUN npm install -g npm@10.1.0
+
+RUN git submodule update --init --recursive
 
 WORKDIR /usr/src/app/client
 
