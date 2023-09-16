@@ -1,5 +1,3 @@
-FROM node:alpine
-
 FROM ubuntu:latest
 RUN apt-get -y update
 RUN apt-get -y install git
@@ -7,28 +5,34 @@ RUN apt-get -y install git
 RUN mkdir -p /usr/src/app/server
 RUN mkdir -p /usr/src/app/client
 
-# Set the Enviournment to production
-ENV NODE_ENV=production
-
 WORKDIR /usr/src/app
 
-COPY .git .
-COPY .gitignore .
-COPY .gitmodules .
+#COPY . .
+COPY .git .git
+COPY .gitignore .gitignore
+COPY .gitmodules .gitmodules
 
 RUN git submodule update --init --recursive
 
+FROM node:alpine
+
+# Set the Enviournment to production
+#ENV NODE_ENV=production
+ENV NODE_ENV=development
+
+RUN npm install -g npm@10.1.0
+
 WORKDIR /usr/src/app/client
 
-COPY ./client/package*.json ./
+COPY ./client/package*.json .
 
-RUN npm install react-scripts -g --silent
+RUN npm install react-scripts -g
 
 # Installs only the dependencies and skips devDependencies.
-RUN npm install --omit=dev
+RUN npm install --force
 
 # Copy all the files to the container.
-COPY ./client/ ./
+COPY ./client/. .
 
 # Create a "dist" folder with the production build.
 #(Skip for Node.js Projects)
@@ -38,7 +42,7 @@ RUN npm run build
 
 WORKDIR /usr/src/app/server
 
-COPY ./server/package*.json ./
+COPY ./server/package*.json .
 
 # Install nestjs which is required for bulding the Nest.js project.
 # (Skip for Node.js Projects)
@@ -48,7 +52,7 @@ RUN npm install -g @nestjs/cli
 RUN npm install --omit=dev
 
 # Copy all the files to the container.
-COPY ./server/ ./
+COPY ./server/. .
 
 # Create a "dist" folder with the production build.
 #(Skip for Node.js Projects)
